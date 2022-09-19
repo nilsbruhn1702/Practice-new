@@ -28,6 +28,10 @@ sumOfTwoNumbers(int a, int b) {
 
 int Function(int a, int b) sumOfTwoNumbers2 = (a, b) => a + b;
 
+void setState(String Function()) {
+  print(Function());
+}
+
 void main() {
   var Jimmy = Dog(
       name: 'Jimmy', eyes: 2, legs: 4, sayHello: () => print('something else'));
@@ -37,4 +41,5 @@ void main() {
   Dog(sayHello: () => print('hello'), eyes: 2, legs: 2, name: 'aselnuss');
   print(sumOfTwoNumbers(4, 3));
   print(sumOfTwoNumbers2(2, 2));
+  setState(() => 'moin');
 }
