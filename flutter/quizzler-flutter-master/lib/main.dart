@@ -42,15 +42,12 @@ class _QuizPageState extends State<QuizPage> {
   List<Widget> appendToRowList(
       int questionNumber, List<List> questionContent, bool question) {
     if (questionContent[1][questionNumber] == question) {
-      print(questionContent[1][questionNumber]);
       rowList.add(Icon(
         Icons.check,
         color: Colors.green,
       ));
       return rowList;
     } else {
-      print(question);
-      print(questionContent[1][questionNumber]);
       rowList.add(Icon(Icons.close, color: Colors.red));
       return rowList;
     }
