@@ -8,6 +8,23 @@ class ResultsPage extends StatelessWidget {
   var bufferData;
   ResultsPage({this.bufferData});
 
+  String calculateBMI(var bufferData) {
+    int weight = int.parse(bufferData.weight);
+    bmi = (weight / pow(bufferData.height / 100, 2));
+    return bmi.toStringAsFixed(1);
+  }
+
+  String getResultText(double bmi) {
+    if (bmi < 18.5) {
+      return 'too skinny!';
+    }
+    if (bmi > 18.5 && bmi < 25) {
+      return 'normal, good!';
+    } else {
+      return 'too fat!';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,22 +55,5 @@ class ResultsPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String calculateBMI(var bufferData) {
-    int weight = int.parse(bufferData.weight);
-    bmi = (weight / pow(bufferData.height / 100, 2));
-    return bmi.toStringAsFixed(1);
-  }
-
-  String getResultText(double bmi) {
-    if (bmi < 18.5) {
-      return 'too skinny!';
-    }
-    if (bmi > 18.5 && bmi < 25) {
-      return 'normal, good!';
-    } else {
-      return 'too fat!';
-    }
   }
 }
