@@ -61,4 +61,4 @@ flutter:
   fonts:
     - family: WorkSans
       fonts:
-        - asset: asset/fonts/WorkSans-Medium.ttf
+        - asset: asset/ fonts/WorkSans-Medium.ttf
