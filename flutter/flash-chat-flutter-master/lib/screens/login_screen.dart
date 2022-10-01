@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         print(e);
                         setState(() {
                           textUnderTextfields =
-                              'Your password is not right for the given e-mail';
+                              'Your password is not right for the given e-mail, please try again!';
                         });
                       }
                     } catch (e) {
