@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+
+import 'chat_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = 'Registration Screen';
@@ -11,6 +14,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
+  String textUnderTextfields = '';
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +64,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 8.0,
             ),
             TextField(
+              obscureText: true,
               style: TextStyle(color: Colors.black),
               onChanged: (value) {
                 password = value;
@@ -92,21 +97,45 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 elevation: 5.0,
                 child: MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
                     print(email);
                     print(password);
-                    _auth.createUserWithEmailAndPassword(
-                        email: email, password: password);4
+                    try {
+                      final newUser =
+                          await _auth.createUserWithEmailAndPassword(
+                              email: email, password: password);
+                      if (newUser != null) {
+                        setState(() => textUnderTextfields = '');
+
+                        Navigator.pushNamed(context, ChatScreen.id);
+                      }
+                    } on PlatformException {
+                      setState(() {
+                        textUnderTextfields =
+                            'The User has already registered, please go to the Login Screen!';
+                      });
+                    } catch (e) {
+                      print(e);
+                      setState(() {
+                        textUnderTextfields = e.toString();
+                      });
+                    }
                   },
                   minWidth: 200.0,
                   height: 42.0,
                   child: Text(
                     'Register',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
+            Text(
+              textUnderTextfields,
+              style: TextStyle(color: Colors.grey),
+            )
           ],
         ),
       ),

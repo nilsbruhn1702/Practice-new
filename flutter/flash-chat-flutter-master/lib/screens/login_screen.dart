@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'chat_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'Login Screen';
@@ -7,8 +11,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _auth = FirebaseAuth.instance;
   String email;
   String password;
+  String textUnderTextfields = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8.0,
             ),
             TextField(
+              obscureText: true,
               style: TextStyle(color: Colors.black),
               onChanged: (value) {
                 password = value;
@@ -89,9 +96,38 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 elevation: 5.0,
                 child: MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
                     print(email);
                     print(password);
+                    try {
+                      final newUser = await _auth.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      if (newUser != null) {
+                        setState(() => textUnderTextfields = '');
+                        Navigator.pushNamed(context, ChatScreen.id);
+                      }
+                    } on PlatformException catch (e) {
+                      print(e);
+                      if (e.toString() ==
+                          'PlatformException(ERROR_INVALID_EMAIL, The email address is badly formatted., null, null)') {
+                        setState(() {
+                          textUnderTextfields =
+                              'Your e-mail adress is not registered, please go to the registration screen!';
+                        });
+                      } else if (e.toString() ==
+                          'PlatformException(ERROR_WRONG_PASSWORD, The password is invalid or the user does not have a password., null, null)') {
+                        print(e);
+                        setState(() {
+                          textUnderTextfields =
+                              'Your password is not right for the given e-mail';
+                        });
+                      }
+                    } catch (e) {
+                      print(e);
+                      setState(() {
+                        textUnderTextfields = e.toString();
+                      });
+                    }
                   },
                   minWidth: 200.0,
                   height: 42.0,
@@ -101,6 +137,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
+            Text(
+              textUnderTextfields,
+              style: TextStyle(color: Colors.grey),
+            )
           ],
         ),
       ),
