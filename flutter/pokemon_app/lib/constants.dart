@@ -1,0 +1,4 @@
+enum Player {
+  playerOne,
+  playerTwo,
+}
